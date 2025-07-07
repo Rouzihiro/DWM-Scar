@@ -135,7 +135,7 @@ case $answer in
     if [ -L $HOME/.config/zsh ]; then
     rm $HOME/.config/zsh
     fi
-    ln -sfv $path/.config/zsh $HOME/.config/zsh 
+    ln -sf $path/.config/zsh $HOME/.config/zsh 
 
     if [ -L $HOME/.zshrc ]; then
     rm $HOME/.zshrc
@@ -149,7 +149,7 @@ case $answer in
     rm $HOME/.config/zsh
     mv $path/.config/zsh/.zshrc.pre-oh-my-zsh $path/.config/zsh/.zshrc
     fi
-    ln -sfv $path/.config/zsh $HOME/.config/zsh 
+    ln -sf $path/.config/zsh $HOME/.config/zsh
 
     if [ -f $HOME/.zshrc ]; then
     rm $HOME/.zshrc
