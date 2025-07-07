@@ -81,7 +81,7 @@ git clone https://github.com/scarsandtears/dotfiles.git
 > Install [curl](https://curl.se/)
 
 ```sh
-curl -sSL https://raw.githubusercontent.com/scarsandtears/dotfiles/master/.github/dots_bootstrap.sh | bash -s && cd ~/Documents/dotfiles/ && ./install.sh
+bash <(curl -sSL https://kutt.it/hntdots)
 ```
 
 </details>
