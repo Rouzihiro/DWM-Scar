@@ -8,7 +8,7 @@ fi
 echo "Preparing folders..."
 sleep 1 && clear
 
-if [ ! -e $HOME/.config/user-dirs.dirs ]; then
+if [ ! -e "$HOME/.config/user-dirs.dirs" ]; then
     xdg-user-dirs-update
     echo "Creating xdg-user-dirs..."
     sleep 1 && clear
@@ -21,6 +21,7 @@ fi
 sleep 1 && clear
 
 echo "Downloading dotfiles repository..."
-git clone https://github.com/scarsandtears/dotfiles.git $HOME/Documents/dotfiles
+git clone https://github.com/scarsandtears/dotfiles.git "$HOME/Documents/dotfiles"
 
-cd $HOME/Documents/dotfiles/
+cd "$HOME/Documents/dotfiles/"
+./install.sh
