@@ -27,7 +27,7 @@ udiskie &
 xsettingsd &
 
 # Set the keyboard layout to brazilian portuguese
-setxkbmap br &
+setxkbmap -layout us,de -variant , -option grp:alt_shift_toggle &
 
 # Start xautolock
 alwayslock &
@@ -54,12 +54,15 @@ if [ -f "$userresources" ]; then
 fi
 
 # Configure display settings with xrandr
-xrandr --output DP-0 --mode 1920x1080 --rate 144 --primary --output DP-2 --mode 1920x1080 --rate 144 --left-of DP-0
+# xrandr --output DP-0 --mode 1920x1080 --rate 144 --primary --output DP-2 --mode 1920x1080 --rate 144 --left-of DP-0
+
+xrandr --output eDP-1 --mode 1920x1080 --rate 60 --primary
+
 
 # Run ssh-agent and dwm in an infinite loop
- while :; do
-  ssh-agent dwm 
- done
+# while :; do
+ # ssh-agent dwm 
+# done
 
 # Execute wm
 exec dbus-launch --sh-syntax --exit-with-session dwm
