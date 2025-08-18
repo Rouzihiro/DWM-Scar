@@ -21,7 +21,7 @@ fi
 sleep 1 && clear
 
 echo "Downloading dotfiles repository..."
-git clone https://github.com/scarsandtears/dotfiles.git "$HOME/Documents/dotfiles"
+git clone https://github.com/Rouzihiro/DWM-Scar.git "$HOME/Documents/dotfiles"
 
 cd "$HOME/Documents/dotfiles/"
 ./install.sh
