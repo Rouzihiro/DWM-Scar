@@ -44,10 +44,10 @@ programs=(
     cava devour exa tty-clock-git picom-simpleanims-next-git cmatrix-git pipes.sh npm checkupdates-with-aur
     xdotool xautolock betterlockscreen yad libnotify pywalfox xsettingsd themix-gui-git
     themix-theme-oomox-git archdroid-icon-theme tesseract-data-eng slop arandr polkit-gnome clipmenu zsh
-    cmus mpd mpc ncmpcpp playerctl dbus simple-mtpfs dunst emacs feh ffmpeg ffmpegthumbnailer firefox flameshot pcmanfm
-    fzf git gnu-free-fonts go gd btop imagemagick mpv fastfetch neovim noto-fonts noto-fonts-cjk noto-fonts-emoji
+    cmus mpd mpc ncmpcpp playerctl dbus simple-mtpfs dunst feh ffmpeg ffmpegthumbnailer firefox flameshot pcmanfm
+    fzf git gnu-free-fonts go gd btop imagemagick mpv fastfetch noto-fonts noto-fonts-cjk noto-fonts-emoji
     numlockx openssh perl pulseaudio pulsemixer udiskie python-pip python-pywal qalculate-gtk android-tools
-    xdg-user-dirs qutebrowser ranger syncthing sxiv tree ttf-jetbrains-mono-nerd ttf-font-awesome
+    xdg-user-dirs ranger syncthing sxiv tree ttf-jetbrains-mono-nerd ttf-font-awesome
     gpick ueberzugpp redshift p7zip unzip epub-thumbnailer-git python-pdftotext poppler xorg-xinput vim webkit2gtk xclip yt-dlp
     zathura zathura-pdf-mupdf zip xorg-server xorg-xinit libx11 libxinerama libxft base base-devel
 )
@@ -169,7 +169,7 @@ echo ""
 
 files=".Xresources .xinitrc .zshenv"
 directories=".config .local .local/bin"
-configs="cava redshift dunst btop xsettingsd xmenu flameshot kitty alacritty mpv neofetch sxiv wal picom ranger zathura qutebrowser cmus mpd ncmpcpp user-dirs.dirs suckless nvim emacs"
+configs="cava redshift dunst btop xsettingsd xmenu flameshot kitty alacritty mpv fastfetch sxiv wal picom ranger zathura cmus mpd ncmpcpp user-dirs.dirs suckless"
 bkp_dir="$HOME/.bkp_config"
 
 if [ ! -d "$bkp_dir" ]; then
