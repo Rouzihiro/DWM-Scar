@@ -11,46 +11,36 @@ path=$(pwd)
 user=$(whoami)
 
 clear
-echo ""
-echo ""
-echo "██╗  ██╗ █████╗ ██╗   ██╗███╗   ██╗████████╗    ██████╗  ██████╗ ████████╗███████╗██╗██╗     ███████╗███████╗ "
-echo "██║  ██║██╔══██╗██║   ██║████╗  ██║╚══██╔══╝    ██╔══██╗██╔═══██╗╚══██╔══╝██╔════╝██║██║     ██╔════╝██╔════╝ "
-echo "███████║███████║██║   ██║██╔██╗ ██║   ██║       ██║  ██║██║   ██║   ██║   █████╗  ██║██║     █████╗  ███████╗ "
-echo "██╔══██║██╔══██║██║   ██║██║╚██╗██║   ██║       ██║  ██║██║   ██║   ██║   ██╔══╝  ██║██║     ██╔══╝  ╚════██║ "
-echo "██║  ██║██║  ██║╚██████╔╝██║ ╚████║   ██║       ██████╔╝╚██████╔╝   ██║   ██║     ██║███████╗███████╗███████║ "
-echo "╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝   ╚═╝       ╚═════╝  ╚═════╝    ╚═╝   ╚═╝     ╚═╝╚══════╝╚══════╝╚══════╝ "
-echo "                              https://github.com/scarsandtears"
-echo ""
 
-if ! command -v yay &> /dev/null; then
+# Ensure yay is installed
+if ! command -v yay &>/dev/null; then
     echo "yay is not installed. Installing yay..."
     git clone https://aur.archlinux.org/yay.git /tmp/yay
     cd /tmp/yay || exit
-    makepkg -si
+    makepkg -si --noconfirm
     cd -
 fi
 
+# Optimize pacman
 if grep -q "^ParallelDownloads" /etc/pacman.conf; then
     sudo sed -i 's/^ParallelDownloads.*/ParallelDownloads = 10/' /etc/pacman.conf
 else
     echo "ParallelDownloads = 10" | sudo tee -a /etc/pacman.conf > /dev/null
 fi
-
 sudo sed -i '/^#\[multilib\]/,/^#Include = \/etc\/pacman.d\/mirrorlist/ s/^#//g' /etc/pacman.conf
+sudo pacman -Sy --noconfirm &>/dev/null
 
-sudo pacman -Sy &> /dev/null
-
-programs=(
-    cava devour exa tty-clock-git picom-simpleanims-next-git cmatrix-git pipes.sh npm checkupdates-with-aur
-    xdotool xautolock betterlockscreen yad libnotify pywalfox xsettingsd themix-gui-git
-    themix-theme-oomox-git archdroid-icon-theme tesseract-data-eng slop arandr polkit-gnome clipmenu zsh
-    cmus mpd mpc ncmpcpp playerctl dbus simple-mtpfs dunst feh ffmpeg ffmpegthumbnailer firefox flameshot pcmanfm
-    fzf git gnu-free-fonts go gd btop imagemagick mpv fastfetch noto-fonts noto-fonts-cjk noto-fonts-emoji
-    numlockx openssh perl pulseaudio pulsemixer udiskie python-pip python-pywal qalculate-gtk android-tools
-    xdg-user-dirs ranger syncthing sxiv tree ttf-jetbrains-mono-nerd ttf-font-awesome
-    gpick ueberzugpp redshift p7zip unzip epub-thumbnailer-git python-pdftotext poppler xorg-xinput vim webkit2gtk xclip yt-dlp
-    zathura zathura-pdf-mupdf zip xorg-server xorg-xinit libx11 libxinerama libxft base base-devel
-)
+# List of programs
+programs=( cava devour exa tty-clock-git picom-simpleanims-next-git cmatrix-git pipes.sh npm \
+    checkupdates-with-aur xdotool xautolock betterlockscreen yad libnotify pywalfox xsettingsd \
+    themix-gui-git themix-theme-oomox-git archdroid-icon-theme tesseract-data-eng slop arandr \
+    polkit-gnome clipmenu zsh cmus mpd mpc ncmpcpp playerctl dbus simple-mtpfs dunst feh ffmpeg \
+    ffmpegthumbnailer firefox flameshot pcmanfm fzf git gnu-free-fonts go gd btop imagemagick mpv \
+    fastfetch noto-fonts noto-fonts-cjk noto-fonts-emoji numlockx openssh perl pulseaudio pulsemixer \
+    udiskie python-pip python-pywal qalculate-gtk android-tools xdg-user-dirs ranger syncthing sxiv \
+    tree ttf-jetbrains-mono-nerd ttf-font-awesome gpick ueberzugpp redshift p7zip unzip epub-thumbnailer-git \
+    python-pdftotext poppler xorg-xinput vim webkit2gtk xclip yt-dlp zathura zathura-pdf-mupdf zip \
+    xorg-server xorg-xinit libx11 libxinerama libxft base base-devel )
 
 total=${#programs[@]}
 count=0
@@ -59,8 +49,7 @@ bar_length=30
 draw_progress_bar() {
     local progress=$1
     local total=$2
-    local percent=$(( 100 * progress / total ))
-    local filled=$(( bar_length * percent / 100 ))
+    local filled=$(( bar_length * progress / total ))
     local empty=$(( bar_length - filled ))
 
     bar=$(printf "%0.s█" $(seq 1 $filled))
@@ -72,12 +61,20 @@ draw_progress_bar() {
 echo "Installing programs..."
 for program in "${programs[@]}"; do
     count=$((count + 1))
+    printf "\r"   # return to start of line
     draw_progress_bar "$count" "$total"
-    printf " Installing: %s\n" "$program"
-    yay -S "$program" --noconfirm &> /dev/null
+
+    if yay -Q "$program" &>/dev/null; then
+        printf " Already installed: %s" "$program"
+    else
+        printf " Installing: %s" "$program"
+        yay -S "$program" --noconfirm &>/dev/null
+    fi
 done
 
-sudo pywalfox install &> /dev/null
+# Post-install: pywalfox
+sudo pywalfox install &>/dev/null
+
 
 sleep 1 && clear
 
