@@ -55,33 +55,26 @@ programs=(
 total=${#programs[@]}
 count=0
 bar_length=30
-spinner_frames=('⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏')
 
-draw_progress_bar "$count" "$total"
-printf " Installing: %-25s " "$program"
+draw_progress_bar() {
+    local progress=$1
+    local total=$2
+    local percent=$(( 100 * progress / total ))
+    local filled=$(( bar_length * percent / 100 ))
+    local empty=$(( bar_length - filled ))
 
-(
-    i=0
-    while kill -0 $spinner_pid 2>/dev/null; do
-        printf "\b%s" "${spinner_frames[i]}"
-        sleep 0.1
-        ((i=(i+1)%${#spinner_frames[@]}))
-    done
-) &
-spinner_pid=$!
+    bar=$(printf "%0.s█" $(seq 1 $filled))
+    bar+=$(printf "%0.s▒" $(seq 1 $empty))
 
-        yay -S "$program" --noconfirm &> /dev/null
+    printf "[%s] %d/%d" "$bar" "$progress" "$total"
+}
 
-        kill $spinner_pid &>/dev/null
-        wait $spinner_pid 2>/dev/null
-        printf "\r\033[K"
-        draw_progress_bar "$count" "$total"
-        printf " Installed: %-25s" "$program"
-    else
-        printf "\r\033[K"
-        draw_progress_bar "$count" "$total"
-        printf " Already installed: %-25s" "$program"
-    fi
+echo "Installing programs..."
+for program in "${programs[@]}"; do
+    count=$((count + 1))
+    draw_progress_bar "$count" "$total"
+    printf " Installing: %s\n" "$program"
+    yay -S "$program" --noconfirm &> /dev/null
 done
 
 sudo pywalfox install &> /dev/null
