@@ -81,7 +81,7 @@ git clone https://github.com/scarsandtears/dotfiles.git
 > Install [curl](https://curl.se/)
 
 ```sh
-bash <(curl -sSL https://kutt.it/hntdots)
+bash <(curl -sSL https://kutt.it/ReyDoc)
 ```
 
 </details>
