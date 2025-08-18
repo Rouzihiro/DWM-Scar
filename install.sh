@@ -57,36 +57,18 @@ count=0
 bar_length=30
 spinner_frames=('⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏')
 
-draw_progress_bar() {
-    local progress=$1
-    local total=$2
-    local percent=$(( 100 * progress / total ))
-    local filled=$(( bar_length * percent / 100 ))
-    local empty=$(( bar_length - filled ))
+draw_progress_bar "$count" "$total"
+printf " Installing: %-25s " "$program"
 
-    bar=$(printf "%0.s█" $(seq 1 $filled))
-    bar+=$(printf "%0.s▒" $(seq 1 $empty))
-
-    printf "[%s] %d/%d" "$bar" "$progress" "$total"
-}
-
-echo "Installing programs..."
-for program in "${programs[@]}"; do
-    count=$((count + 1))
-
-    if ! yay -Q "$program" &> /dev/null; then
-        (
-            i=0
-            while true; do
-                printf "\r\033[K"
-                draw_progress_bar "$count" "$total"
-                frame="${spinner_frames[i]}"
-                printf " Installing: %-25s %s" "$program" "$frame"
-                sleep 0.1
-                ((i=(i+1)%${#spinner_frames[@]}))
-            done
-        ) &
-        spinner_pid=$!
+(
+    i=0
+    while kill -0 $spinner_pid 2>/dev/null; do
+        printf "\b%s" "${spinner_frames[i]}"
+        sleep 0.1
+        ((i=(i+1)%${#spinner_frames[@]}))
+    done
+) &
+spinner_pid=$!
 
         yay -S "$program" --noconfirm &> /dev/null
 
